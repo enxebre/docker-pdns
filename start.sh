@@ -4,6 +4,7 @@ MYSQL_PORT=${MYSQL_PORT:-3306}
 MYSQL_USER=${MYSQL_USER:-root}
 MYSQL_PASSWORD=${DB_ENV_MYSQL_ROOT_PASSWORD}
 MYSQL_DB=${MYSQL_DB:-pdns}
+PDNS_ZONE=${PDNS_ZONE}
 PDNS_ALLOW_AXFR_IPS=${PDNS_ALLOW_AXFR_IPS:-127.0.0.1}
 PDNS_MASTER=${PDNS_MASTER:-yes}
 PDNS_SLAVE=${PDNS_SLAVE:-no}
@@ -55,6 +56,10 @@ sed -i "s/{{MYSQL_DB}}/${MYSQL_DB}/" /var/www/html/inc/config.inc.php
 sed -i "s/{{POWERADMIN_HOSTMASTER}}/${POWERADMIN_HOSTMASTER}/" /var/www/html/inc/config.inc.php
 sed -i "s/{{POWERADMIN_NS1}}/${POWERADMIN_NS1}/" /var/www/html/inc/config.inc.php
 sed -i "s/{{POWERADMIN_NS2}}/${POWERADMIN_NS2}/" /var/www/html/inc/config.inc.php
+
+echo "Creating Zone: ${PDNS_ZONE}"
+
+exec pdnsutil create-zone ${PDNS_ZONE}
 
 exec /usr/bin/supervisord
 
